@@ -62,11 +62,6 @@ font-size:16px;
 margin:10px 0 5px;
 }
 
-.phone p{
-font-size:13px;
-color:gray;
-}
-
 .phone a{
 display:inline-block;
 margin-top:8px;
@@ -85,10 +80,10 @@ font-size:13px;
 <header>🌍 World Mobile Hub</header>
 
 <div class="brands">
-<button class="brand-btn" onclick="loadBrand('iphone')">Apple</button>
-<button class="brand-btn" onclick="loadBrand('samsung')">Samsung</button>
-<button class="brand-btn" onclick="loadBrand('poco smartphone')">Poco</button>
-<button class="brand-btn" onclick="loadBrand('realme smartphone')">Realme</button>
+<button class="brand-btn" onclick="loadBrand('Apple iPhone')">Apple</button>
+<button class="brand-btn" onclick="loadBrand('Samsung Galaxy')">Samsung</button>
+<button class="brand-btn" onclick="loadBrand('Poco smartphone')">Poco</button>
+<button class="brand-btn" onclick="loadBrand('Realme smartphone')">Realme</button>
 </div>
 
 <div id="phoneList"></div>
@@ -97,43 +92,30 @@ font-size:13px;
 
 let phoneList = document.getElementById("phoneList");
 
-function loadBrand(brand){
-
-phoneList.innerHTML="Loading...";
-
-fetch(`https://dummyjson.com/products/search?q=${brand}`)
-.then(res=>res.json())
-.then(data=>{
+function loadBrand(keyword){
 
 phoneList.innerHTML="";
 
-if(data.products.length === 0){
-phoneList.innerHTML="<h3>No Products Found</h3>";
-return;
-}
+for(let i=1; i<=6; i++){
 
-data.products.slice(0,8).forEach(p=>{
+let name = keyword + " Model " + i;
 
-let amazonLink=`https://www.amazon.in/s?k=${p.title.replace(/ /g,"+")}`;
+let image = `https://dummyimage.com/400x500/000/fff&text=${keyword.replace(/ /g,"+")}+${i}`;
+
+let amazonLink=`https://www.amazon.in/s?k=${keyword.replace(/ /g,"+")}`;
 
 let div=document.createElement("div");
 div.className="phone";
 
 div.innerHTML=`
-<img src="${p.thumbnail}">
-<h3>${p.title}</h3>
-<p>${p.description.substring(0,60)}...</p>
+<img src="${image}">
+<h3>${name}</h3>
 <a href="${amazonLink}" target="_blank">Buy on Amazon</a>
 `;
 
 phoneList.appendChild(div);
 
-});
-
-})
-.catch(()=>{
-phoneList.innerHTML="<h3>Error Loading Products</h3>";
-});
+}
 
 }
 
