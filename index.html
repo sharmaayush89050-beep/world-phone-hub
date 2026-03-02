@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -100,7 +101,8 @@ for(let i=1; i<=6; i++){
 
 let name = keyword + " Model " + i;
 
-let image = `https://dummyimage.com/400x500/000/fff&text=${keyword.replace(/ /g,"+")}+${i}`;
+/* Stable image source */
+let image = `https://picsum.photos/400/500?random=${Math.floor(Math.random()*1000)}`;
 
 let amazonLink=`https://www.amazon.in/s?k=${keyword.replace(/ /g,"+")}`;
 
