@@ -87,8 +87,8 @@ font-size:13px;
 <div class="brands">
 <button class="brand-btn" onclick="loadBrand('iphone')">Apple</button>
 <button class="brand-btn" onclick="loadBrand('samsung')">Samsung</button>
-<button class="brand-btn" onclick="loadPoco()">Poco</button>
-<button class="brand-btn" onclick="loadRealme()">Realme</button>
+<button class="brand-btn" onclick="loadBrand('poco smartphone')">Poco</button>
+<button class="brand-btn" onclick="loadBrand('realme smartphone')">Realme</button>
 </div>
 
 <div id="phoneList"></div>
@@ -96,8 +96,6 @@ font-size:13px;
 <script>
 
 let phoneList = document.getElementById("phoneList");
-
-/* ---------- API Brands ---------- */
 
 function loadBrand(brand){
 
@@ -108,6 +106,11 @@ fetch(`https://dummyjson.com/products/search?q=${brand}`)
 .then(data=>{
 
 phoneList.innerHTML="";
+
+if(data.products.length === 0){
+phoneList.innerHTML="<h3>No Products Found</h3>";
+return;
+}
 
 data.products.slice(0,8).forEach(p=>{
 
@@ -127,102 +130,9 @@ phoneList.appendChild(div);
 
 });
 
-});
-
-}
-
-/* ---------- POCO ---------- */
-
-function loadPoco(){
-
-phoneList.innerHTML="";
-
-let phones = [
-
-{
-name:"Poco X6 Pro",
-image:"https://dummyimage.com/400x500/000/fff&text=Poco+X6+Pro",
-desc:"Dimensity 8300 | 120Hz AMOLED"
-},
-
-{
-name:"Poco F5",
-image:"https://dummyimage.com/400x500/111/fff&text=Poco+F5",
-desc:"Snapdragon 7+ Gen 2 | 120Hz Display"
-},
-
-{
-name:"Poco M6 Pro",
-image:"https://dummyimage.com/400x500/222/fff&text=Poco+M6+Pro",
-desc:"64MP Camera | Helio G99"
-}
-
-];
-
-phones.forEach(p=>{
-
-let amazonLink=`https://www.amazon.in/s?k=${p.name.replace(/ /g,"+")}`;
-
-let div=document.createElement("div");
-div.className="phone";
-
-div.innerHTML=`
-<img src="${p.image}">
-<h3>${p.name}</h3>
-<p>${p.desc}</p>
-<a href="${amazonLink}" target="_blank">Buy on Amazon</a>
-`;
-
-phoneList.appendChild(div);
-
-});
-
-}
-
-/* ---------- REALME ---------- */
-
-function loadRealme(){
-
-phoneList.innerHTML="";
-
-let phones = [
-
-{
-name:"Realme 12 Pro+",
-image:"https://dummyimage.com/400x500/333/fff&text=Realme+12+Pro+Plus",
-desc:"200MP Camera | Snapdragon 7s Gen 2"
-},
-
-{
-name:"Realme Narzo 70",
-image:"https://dummyimage.com/400x500/444/fff&text=Realme+Narzo+70",
-desc:"AMOLED Display | 120Hz"
-},
-
-{
-name:"Realme GT Neo 3",
-image:"https://dummyimage.com/400x500/555/fff&text=Realme+GT+Neo+3",
-desc:"Dimensity 8100 | 150W Charging"
-}
-
-];
-
-phones.forEach(p=>{
-
-let amazonLink=`https://www.amazon.in/s?k=${p.name.replace(/ /g,"+")}`;
-
-let div=document.createElement("div");
-div.className="phone";
-
-div.innerHTML=`
-<img src="${p.image}">
-<h3>${p.name}</h3>
-<p>${p.desc}</p>
-<a href="${amazonLink}" target="_blank">Buy on Amazon</a>
-`;
-
-phoneList.appendChild(div);
-
+})
+.catch(()=>{
+phoneList.innerHTML="<h3>Error Loading Products</h3>";
 });
 
 }
