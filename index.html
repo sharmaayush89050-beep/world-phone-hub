@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Phone Hub</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#0f0f0f;
+color:white;
+text-align:center;
+}
+
+header{
+background:#00c3ff;
+padding:20px;
+font-size:24px;
+font-weight:bold;
+}
+
+#phone-list{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+padding:20px;
+}
+
+.phone{
+background:#1c1c1c;
+margin:15px;
+padding:20px;
+border-radius:12px;
+width:260px;
+box-shadow:0 0 15px rgba(0,0,0,0.6);
+transition:0.3s;
+}
+
+.phone:hover{
+transform:scale(1.05);
+}
+
+.phone img{
+width:100%;
+height:220px;
+object-fit:cover;
+border-radius:10px;
+}
+
+.phone h3{
+margin:12px 0 5px;
+}
+
+.phone p{
+font-size:14px;
+color:#ccc;
+}
+
+.phone a{
+display:inline-block;
+margin-top:10px;
+padding:8px 15px;
+background:#00c3ff;
+color:black;
+text-decoration:none;
+border-radius:6px;
+font-weight:bold;
+}
+
+footer{
+background:#000;
+padding:15px;
+margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+📱 WORLD PHONE HUB
+</header>
+
+<div id="phone-list"></div>
+
+<footer>
+© 2026 World Phone Hub | Ayush Sharma
+</footer>
+
+<script>
+
+function addPhone(name, image, specs, link){
+
+let container = document.getElementById("phone-list");
+
+let phone = document.createElement("div");
+phone.className = "phone";
+
+phone.innerHTML = `
+<img src="${image}" 
+onerror="this.src='https://dummyimage.com/400x500/000/fff&text=No+Image'">
+<h3>${name}</h3>
+<p>${specs}</p>
+<a href="${link}" target="_blank">Buy Now</a>
+`;
+
+container.appendChild(phone);
+}
+
+/* Default Phones */
+
+addPhone(
+"iPhone 15 Pro Max",
+"https://upload.wikimedia.org/wikipedia/commons/1/1f/IPhone_15_Pro_Max.png",
+"48MP Camera | A17 Chip | 6.7 Display",
+"https://www.amazon.in"
+);
+
+addPhone(
+"Samsung Galaxy S23",
+"https://upload.wikimedia.org/wikipedia/commons/5/5e/Samsung_Galaxy_S23.png",
+"50MP Camera | Snapdragon 8 Gen 2 | 6.1 Display",
+"https://www.flipkart.com"
+);
+
+</script>
+
+</body>
+</html>
