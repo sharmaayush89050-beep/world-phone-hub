@@ -1,14 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>World Mobile Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body{
+      font-family: Arial;
+      background:#111;
+      color:white;
+      text-align:center;
+    }
+
+    h1{
+      margin-top:20px;
+    }
+
+    button{
+      padding:10px 20px;
+      margin:5px;
+      border:none;
+      border-radius:5px;
+      cursor:pointer;
+      font-weight:bold;
+    }
+
+    .brand-btn{
+      background:#ff9800;
+      color:black;
+    }
+
+    .phone{
+      background:#222;
+      margin:15px;
+      padding:15px;
+      border-radius:10px;
+    }
+
+    img{
+      width:200px;
+      height:250px;
+      object-fit:cover;
+      border-radius:10px;
+    }
+
+    a{
+      display:inline-block;
+      margin-top:10px;
+      padding:8px 15px;
+      background:red;
+      color:white;
+      text-decoration:none;
+      border-radius:5px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>World Mobile Hub</h1>
+
+<button class="brand-btn" onclick="loadBrand('Apple')">Apple</button>
+<button class="brand-btn" onclick="loadBrand('Samsung')">Samsung</button>
+
+<div id="phoneList"></div>
+
 <script>
 
 const API_KEY = "MhmvsW2tPrYRjI9uiasEeXUE44WJoN8kBTsheZwm";
 
 let phoneList = document.getElementById("phoneList");
 
-fetch("phones.json")
-.then(res => res.json())
-.then(data => {
-  window.allPhones = data;
-});
+window.allPhones = [
+  { brand: "Apple", name: "iPhone 15", os: "iOS" },
+  { brand: "Apple", name: "iPhone 14", os: "iOS" },
+  { brand: "Samsung", name: "Galaxy S23", os: "Android" },
+  { brand: "Samsung", name: "Galaxy A54", os: "Android" }
+];
 
 async function loadBrand(brand){
 
@@ -28,7 +94,7 @@ async function loadBrand(brand){
     div.className = "phone";
 
     div.innerHTML = `
-      <img src="${imageUrl}" alt="${phone.name}">
+      <img src="${imageUrl}">
       <h3>${phone.name}</h3>
       <p>OS: ${phone.os}</p>
       <a href="${amazonLink}" target="_blank">Buy on Amazon</a>
@@ -52,12 +118,15 @@ async function fetchImage(query){
     if(data.length > 0){
       return data[0].image;
     } else {
-      return "https://via.placeholder.com/300x400?text=No+Image";
+      return "https://via.placeholder.com/200x250?text=No+Image";
     }
 
   } catch(error){
-    return "https://via.placeholder.com/300x400?text=Error";
+    return "https://via.placeholder.com/200x250?text=Error";
   }
 }
 
-       </script>
+</script>
+
+</body>
+</html>
