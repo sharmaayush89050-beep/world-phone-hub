@@ -1,160 +1,124 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<title>World Mobile Hub</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>World Phone Hub - Pro</title>
 
 <style>
 body{
+font-family: Arial;
 margin:0;
-font-family:Arial;
-background:#111;
-color:white;
+background:#f2f2f2;
 text-align:center;
 }
 
 header{
-background:#00c3ff;
-padding:20px;
-font-size:24px;
+background:black;
+color:white;
+padding:15px;
+font-size:22px;
 font-weight:bold;
 }
 
-#controls{
-margin:20px;
-}
-
-input{
-padding:8px;
-width:220px;
-border-radius:5px;
-border:none;
-}
-
-button{
-padding:8px 12px;
-margin:5px;
-border:none;
-border-radius:5px;
-cursor:pointer;
-font-weight:bold;
+.brands{
+margin:15px;
 }
 
 .brand-btn{
-background:#333;
+padding:10px 15px;
+margin:5px;
+border:none;
+background:black;
 color:white;
+cursor:pointer;
+border-radius:5px;
 }
 
-.brand-btn:hover{
-background:#00c3ff;
-color:black;
-}
-
-#phone-list{
+#phoneList{
 display:flex;
 flex-wrap:wrap;
 justify-content:center;
-padding:20px;
+gap:15px;
+padding:10px;
 }
 
 .phone{
-background:#1c1c1c;
-margin:10px;
-padding:15px;
+background:white;
+width:220px;
+padding:10px;
 border-radius:10px;
-width:230px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
 
 .phone img{
 width:100%;
-height:200px;
+height:220px;
 object-fit:cover;
 border-radius:8px;
+}
+
+.phone h3{
+font-size:16px;
+margin:10px 0 5px;
+}
+
+.phone p{
+font-size:13px;
+color:gray;
 }
 
 .phone a{
 display:inline-block;
 margin-top:8px;
-padding:6px 12px;
-background:#00c3ff;
-color:black;
+padding:6px 10px;
+background:black;
+color:white;
 text-decoration:none;
 border-radius:5px;
-font-weight:bold;
-}
-
-#pagination{
-margin:20px;
-}
-
-footer{
-background:#000;
-padding:15px;
-margin-top:20px;
+font-size:13px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-📱 WORLD PHONE HUB - PRO
-</header>
+<header>🌍 World Mobile Hub</header>
 
-<div id="controls">
-<input type="text" id="searchBox" placeholder="Search phone...">
-<br>
-<button class="brand-btn" onclick="setBrand('iphone')">Apple</button>
-<button class="brand-btn" onclick="setBrand('samsung')">Samsung</button>
-<button class="brand-btn" onclick="setBrand('xiaomi')">Xiaomi</button>
-<button class="brand-btn" onclick="setBrand('vivo')">Vivo</button>
-<button class="brand-btn" onclick="setBrand('')">All</button>
+<div class="brands">
+<button class="brand-btn" onclick="loadBrand('iphone')">Apple</button>
+<button class="brand-btn" onclick="loadBrand('samsung')">Samsung</button>
+<button class="brand-btn" onclick="loadXiaomi()">Xiaomi</button>
 </div>
 
-<div id="phone-list"></div>
-
-<div id="pagination">
-<button onclick="prevPage()">Prev</button>
-<button onclick="nextPage()">Next</button>
-</div>
-
-<footer>
-© 2026 World Phone Hub | Ayush Sharma
-</footer>
+<div id="phoneList"></div>
 
 <script>
 
-let currentPage = 0;
-let currentBrand = "iphone";
-const limit = 8;
+let phoneList = document.getElementById("phoneList");
 
-const phoneList = document.getElementById("phone-list");
-const searchBox = document.getElementById("searchBox");
+/* ---------- API Brands ---------- */
 
-async function fetchPhones(query="iphone"){
+function loadBrand(brand){
 
 phoneList.innerHTML="Loading...";
 
-let skip = currentPage * limit;
-
-try{
-let res = await fetch(`https://dummyjson.com/products/search?q=${query}&limit=${limit}&skip=${skip}`);
-let data = await res.json();
+fetch(`https://dummyjson.com/products/search?q=${brand}`)
+.then(res=>res.json())
+.then(data=>{
 
 phoneList.innerHTML="";
 
-data.products.forEach(product=>{
+data.products.slice(0,8).forEach(p=>{
+
+let amazonLink=`https://www.amazon.in/s?k=${p.title.replace(/ /g,"+")}`;
 
 let div=document.createElement("div");
 div.className="phone";
 
-let amazonLink=`https://www.amazon.in/s?k=${product.title.replace(/ /g,"+")}`;
-
 div.innerHTML=`
-<img src="${product.thumbnail}">
-<h3>${product.title}</h3>
-<p>${product.description.substring(0,60)}...</p>
+<img src="${p.thumbnail}">
+<h3>${p.title}</h3>
+<p>${p.description.substring(0,60)}...</p>
 <a href="${amazonLink}" target="_blank">Buy on Amazon</a>
 `;
 
@@ -162,40 +126,63 @@ phoneList.appendChild(div);
 
 });
 
-}catch{
-phoneList.innerHTML="Failed to load data";
-}
-
-}
-
-function setBrand(brand){
-currentBrand=brand || searchBox.value || "iphone";
-currentPage=0;
-fetchPhones(currentBrand);
-}
-
-function nextPage(){
-currentPage++;
-fetchPhones(currentBrand);
-}
-
-function prevPage(){
-if(currentPage>0){
-currentPage--;
-fetchPhones(currentBrand);
-}
-}
-
-searchBox.addEventListener("keyup",()=>{
-let val=searchBox.value.trim();
-if(val.length>2){
-currentBrand=val;
-currentPage=0;
-fetchPhones(val);
-}
 });
 
-fetchPhones(currentBrand);
+}
+
+/* ---------- Xiaomi Manual ---------- */
+
+function loadXiaomi(){
+
+phoneList.innerHTML="";
+
+let phones = [
+
+{
+name:"Xiaomi 13 Pro",
+image:"https://source.unsplash.com/400x500/?xiaomi-13-pro",
+desc:"50MP Camera | Snapdragon 8 Gen 2"
+},
+
+{
+name:"Redmi Note 13 Pro",
+image:"https://source.unsplash.com/400x500/?redmi-note-13",
+desc:"200MP Camera | AMOLED Display"
+},
+
+{
+name:"Poco X6 Pro",
+image:"https://source.unsplash.com/400x500/?poco-x6",
+desc:"Dimensity Processor | 120Hz Display"
+},
+
+{
+name:"Xiaomi 12",
+image:"https://source.unsplash.com/400x500/?xiaomi-12",
+desc:"Snapdragon 8 Gen 1 | 120Hz AMOLED"
+}
+
+];
+
+phones.forEach(p=>{
+
+let amazonLink=`https://www.amazon.in/s?k=${p.name.replace(/ /g,"+")}`;
+
+let div=document.createElement("div");
+div.className="phone";
+
+div.innerHTML=`
+<img src="${p.image}">
+<h3>${p.name}</h3>
+<p>${p.desc}</p>
+<a href="${amazonLink}" target="_blank">Buy on Amazon</a>
+`;
+
+phoneList.appendChild(div);
+
+});
+
+}
 
 </script>
 
