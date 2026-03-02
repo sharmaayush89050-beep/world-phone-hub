@@ -8,8 +8,8 @@
 <style>
 body{
 margin:0;
-font-family:Arial, sans-serif;
-background:#0f0f0f;
+font-family:Arial;
+background:#111;
 color:white;
 text-align:center;
 }
@@ -19,6 +19,14 @@ background:#00c3ff;
 padding:20px;
 font-size:24px;
 font-weight:bold;
+}
+
+#searchBox{
+margin:20px;
+padding:10px;
+width:250px;
+border-radius:5px;
+border:none;
 }
 
 #phone-list{
@@ -32,14 +40,8 @@ padding:20px;
 background:#1c1c1c;
 margin:15px;
 padding:20px;
-border-radius:12px;
-width:260px;
-box-shadow:0 0 15px rgba(0,0,0,0.6);
-transition:0.3s;
-}
-
-.phone:hover{
-transform:scale(1.05);
+border-radius:10px;
+width:250px;
 }
 
 .phone img{
@@ -49,15 +51,6 @@ object-fit:cover;
 border-radius:10px;
 }
 
-.phone h3{
-margin:12px 0 5px;
-}
-
-.phone p{
-font-size:14px;
-color:#ccc;
-}
-
 .phone a{
 display:inline-block;
 margin-top:10px;
@@ -65,7 +58,7 @@ padding:8px 15px;
 background:#00c3ff;
 color:black;
 text-decoration:none;
-border-radius:6px;
+border-radius:5px;
 font-weight:bold;
 }
 
@@ -83,6 +76,8 @@ margin-top:20px;
 📱 WORLD PHONE HUB
 </header>
 
+<input type="text" id="searchBox" placeholder="Search Phone...">
+
 <div id="phone-list"></div>
 
 <footer>
@@ -91,39 +86,47 @@ margin-top:20px;
 
 <script>
 
-function addPhone(name, image, specs, link){
+const phoneList = document.getElementById("phone-list");
+const searchBox = document.getElementById("searchBox");
 
-let container = document.getElementById("phone-list");
+async function fetchPhones(query="iphone"){
+phoneList.innerHTML = "Loading...";
 
-let phone = document.createElement("div");
-phone.className = "phone";
+try{
+let res = await fetch(`https://dummyjson.com/products/search?q=${query}`);
+let data = await res.json();
 
-phone.innerHTML = `
-<img src="${image}" 
-onerror="this.src='https://dummyimage.com/400x500/000/fff&text=No+Image'">
-<h3>${name}</h3>
-<p>${specs}</p>
-<a href="${link}" target="_blank">Buy Now</a>
+phoneList.innerHTML = "";
+
+data.products.forEach(product => {
+
+let div = document.createElement("div");
+div.className = "phone";
+
+div.innerHTML = `
+<img src="${product.thumbnail}">
+<h3>${product.title}</h3>
+<p>${product.description.substring(0,60)}...</p>
+<a href="#">Buy Now</a>
 `;
 
-container.appendChild(phone);
+phoneList.appendChild(div);
+
+});
+
+}catch(err){
+phoneList.innerHTML = "Failed to load data";
+}
 }
 
-/* Default Phones */
+fetchPhones();
 
-addPhone(
-"iPhone 15 Pro Max",
-"https://upload.wikimedia.org/wikipedia/commons/1/1f/IPhone_15_Pro_Max.png",
-"48MP Camera | A17 Chip | 6.7 Display",
-"https://www.amazon.in"
-);
-
-addPhone(
-"Samsung Galaxy S23",
-"https://upload.wikimedia.org/wikipedia/commons/5/5e/Samsung_Galaxy_S23.png",
-"50MP Camera | Snapdragon 8 Gen 2 | 6.1 Display",
-"https://www.flipkart.com"
-);
+searchBox.addEventListener("keyup", () => {
+let value = searchBox.value.trim();
+if(value.length > 2){
+fetchPhones(value);
+}
+});
 
 </script>
 
