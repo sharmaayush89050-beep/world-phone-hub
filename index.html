@@ -87,7 +87,8 @@ font-size:13px;
 <div class="brands">
 <button class="brand-btn" onclick="loadBrand('iphone')">Apple</button>
 <button class="brand-btn" onclick="loadBrand('samsung')">Samsung</button>
-<button class="brand-btn" onclick="loadXiaomi()">Xiaomi</button>
+<button class="brand-btn" onclick="loadPoco()">Poco</button>
+<button class="brand-btn" onclick="loadRealme()">Realme</button>
 </div>
 
 <div id="phoneList"></div>
@@ -130,36 +131,78 @@ phoneList.appendChild(div);
 
 }
 
-/* ---------- Xiaomi Manual ---------- */
+/* ---------- POCO ---------- */
 
-function loadXiaomi(){
+function loadPoco(){
 
 phoneList.innerHTML="";
 
 let phones = [
 
 {
-name:"Xiaomi 13 Pro",
-image:"https://source.unsplash.com/400x500/?xiaomi-13-pro",
-desc:"50MP Camera | Snapdragon 8 Gen 2"
-},
-
-{
-name:"Redmi Note 13 Pro",
-image:"https://source.unsplash.com/400x500/?redmi-note-13",
-desc:"200MP Camera | AMOLED Display"
-},
-
-{
 name:"Poco X6 Pro",
-image:"https://source.unsplash.com/400x500/?poco-x6",
-desc:"Dimensity Processor | 120Hz Display"
+image:"https://dummyimage.com/400x500/000/fff&text=Poco+X6+Pro",
+desc:"Dimensity 8300 | 120Hz AMOLED"
 },
 
 {
-name:"Xiaomi 12",
-image:"https://source.unsplash.com/400x500/?xiaomi-12",
-desc:"Snapdragon 8 Gen 1 | 120Hz AMOLED"
+name:"Poco F5",
+image:"https://dummyimage.com/400x500/111/fff&text=Poco+F5",
+desc:"Snapdragon 7+ Gen 2 | 120Hz Display"
+},
+
+{
+name:"Poco M6 Pro",
+image:"https://dummyimage.com/400x500/222/fff&text=Poco+M6+Pro",
+desc:"64MP Camera | Helio G99"
+}
+
+];
+
+phones.forEach(p=>{
+
+let amazonLink=`https://www.amazon.in/s?k=${p.name.replace(/ /g,"+")}`;
+
+let div=document.createElement("div");
+div.className="phone";
+
+div.innerHTML=`
+<img src="${p.image}">
+<h3>${p.name}</h3>
+<p>${p.desc}</p>
+<a href="${amazonLink}" target="_blank">Buy on Amazon</a>
+`;
+
+phoneList.appendChild(div);
+
+});
+
+}
+
+/* ---------- REALME ---------- */
+
+function loadRealme(){
+
+phoneList.innerHTML="";
+
+let phones = [
+
+{
+name:"Realme 12 Pro+",
+image:"https://dummyimage.com/400x500/333/fff&text=Realme+12+Pro+Plus",
+desc:"200MP Camera | Snapdragon 7s Gen 2"
+},
+
+{
+name:"Realme Narzo 70",
+image:"https://dummyimage.com/400x500/444/fff&text=Realme+Narzo+70",
+desc:"AMOLED Display | 120Hz"
+},
+
+{
+name:"Realme GT Neo 3",
+image:"https://dummyimage.com/400x500/555/fff&text=Realme+GT+Neo+3",
+desc:"Dimensity 8100 | 150W Charging"
 }
 
 ];
