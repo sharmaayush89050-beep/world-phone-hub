@@ -1,0 +1,42 @@
+[
+  {
+    "brand": "apple",
+    "name": "iPhone 15",
+    "os": "iOS"
+  },
+  {
+    "brand": "apple",
+    "name": "iPhone 14",
+    "os": "iOS"
+  },
+  {
+    "brand": "samsung",
+    "name": "Samsung Galaxy S23",
+    "os": "Android"
+  },
+  {
+    "brand": "samsung",
+    "name": "Samsung Galaxy A54",
+    "os": "Android"
+  },
+  {
+    "brand": "poco",
+    "name": "Poco X5 Pro",
+    "os": "Android"
+  },
+  {
+    "brand": "poco",
+    "name": "Poco F5",
+    "os": "Android"
+  },
+  {
+    "brand": "realme",
+    "name": "Realme 11 Pro",
+    "os": "Android"
+  },
+  {
+    "brand": "realme",
+    "name": "Realme Narzo 60",
+    "os": "Android"
+  }
+]
