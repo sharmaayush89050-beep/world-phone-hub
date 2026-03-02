@@ -1,137 +1,63 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>World Mobile Hub</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body{
-font-family: Arial;
-margin:0;
-background:#f2f2f2;
-text-align:center;
-}
-
-header{
-background:black;
-color:white;
-padding:15px;
-font-size:22px;
-font-weight:bold;
-}
-
-.brands{
-margin:15px;
-}
-
-.brand-btn{
-padding:10px 15px;
-margin:5px;
-border:none;
-background:black;
-color:white;
-cursor:pointer;
-border-radius:5px;
-}
-
-#phoneList{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:15px;
-padding:10px;
-}
-
-.phone{
-background:white;
-width:230px;
-padding:10px;
-border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
-}
-
-.phone img{
-width:100%;
-height:220px;
-object-fit:cover;
-border-radius:8px;
-}
-
-.phone h3{
-font-size:15px;
-margin:10px 0 5px;
-}
-
-.phone p{
-font-size:12px;
-color:gray;
-}
-
-.phone a{
-display:inline-block;
-margin-top:8px;
-padding:6px 10px;
-background:black;
-color:white;
-text-decoration:none;
-border-radius:5px;
-font-size:13px;
-}
-</style>
-</head>
-
-<body>
-
-<header>🌍 World Mobile Hub</header>
-
-<div class="brands">
-<button class="brand-btn" onclick="loadBrand('apple')">Apple</button>
-<button class="brand-btn" onclick="loadBrand('samsung')">Samsung</button>
-<button class="brand-btn" onclick="loadBrand('poco')">Poco</button>
-<button class="brand-btn" onclick="loadBrand('realme')">Realme</button>
-</div>
-
-<div id="phoneList"></div>
-
 <script>
+
+const API_KEY = "MhmvsW2tPrYRjI9uiasEeXUE44WJoN8kBTsheZwm";
 
 let phoneList = document.getElementById("phoneList");
 
 fetch("phones.json")
 .then(res => res.json())
 .then(data => {
-window.allPhones = data;
+  window.allPhones = data;
 });
 
-function loadBrand(brand){
+async function loadBrand(brand){
 
-phoneList.innerHTML="";
+  phoneList.innerHTML = "Loading...";
 
-let filtered = window.allPhones.filter(phone => phone.brand === brand);
+  let filtered = window.allPhones.filter(phone => phone.brand === brand);
 
-filtered.forEach(phone => {
+  phoneList.innerHTML = "";
 
-let image = `https://source.unsplash.com/400x500/?${phone.name.replace(/ /g,",")},smartphone`;
+  for (let phone of filtered){
 
-let amazonLink = `https://www.amazon.in/s?k=${phone.name.replace(/ /g,"+")}`;
+    let imageUrl = await fetchImage(phone.name);
 
-let div = document.createElement("div");
-div.className="phone";
+    let amazonLink = `https://www.amazon.in/s?k=${phone.name.replace(/ /g,"+")}`;
 
-div.innerHTML = `
-<img src="${image}">
-<h3>${phone.name}</h3>
-<p>OS: ${phone.os}</p>
-<a href="${amazonLink}" target="_blank">Buy on Amazon</a>
-`;
+    let div = document.createElement("div");
+    div.className = "phone";
 
-phoneList.appendChild(div);
+    div.innerHTML = `
+      <img src="${imageUrl}" alt="${phone.name}">
+      <h3>${phone.name}</h3>
+      <p>OS: ${phone.os}</p>
+      <a href="${amazonLink}" target="_blank">Buy on Amazon</a>
+    `;
 
-});
-
+    phoneList.appendChild(div);
+  }
 }
 
-</script>
+async function fetchImage(query){
+  try{
+    const response = await fetch(
+      `https://api.api-ninjas.com/v1/imagesearch?query=${query} smartphone`,
+      {
+        headers: { 'X-Api-Key': API_KEY }
+      }
+    );
 
-</body>
-</html>
+    const data = await response.json();
+
+    if(data.length > 0){
+      return data[0].image;
+    } else {
+      return "https://via.placeholder.com/300x400?text=No+Image";
+    }
+
+  } catch(error){
+    return "https://via.placeholder.com/300x400?text=Error";
+  }
+}
+
+       </script>
