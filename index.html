@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>World Phone Hub</title>
+<title>World Phone Hub - Pro</title>
 
 <style>
 body{
@@ -21,12 +21,34 @@ font-size:24px;
 font-weight:bold;
 }
 
-#searchBox{
+#controls{
 margin:20px;
-padding:10px;
-width:250px;
+}
+
+input{
+padding:8px;
+width:220px;
 border-radius:5px;
 border:none;
+}
+
+button{
+padding:8px 12px;
+margin:5px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.brand-btn{
+background:#333;
+color:white;
+}
+
+.brand-btn:hover{
+background:#00c3ff;
+color:black;
 }
 
 #phone-list{
@@ -38,28 +60,32 @@ padding:20px;
 
 .phone{
 background:#1c1c1c;
-margin:15px;
-padding:20px;
+margin:10px;
+padding:15px;
 border-radius:10px;
-width:250px;
+width:230px;
 }
 
 .phone img{
 width:100%;
-height:220px;
+height:200px;
 object-fit:cover;
-border-radius:10px;
+border-radius:8px;
 }
 
 .phone a{
 display:inline-block;
-margin-top:10px;
-padding:8px 15px;
+margin-top:8px;
+padding:6px 12px;
 background:#00c3ff;
 color:black;
 text-decoration:none;
 border-radius:5px;
 font-weight:bold;
+}
+
+#pagination{
+margin:20px;
 }
 
 footer{
@@ -73,12 +99,25 @@ margin-top:20px;
 <body>
 
 <header>
-📱 WORLD PHONE HUB
+📱 WORLD PHONE HUB - PRO
 </header>
 
-<input type="text" id="searchBox" placeholder="Search Phone...">
+<div id="controls">
+<input type="text" id="searchBox" placeholder="Search phone...">
+<br>
+<button class="brand-btn" onclick="setBrand('iphone')">Apple</button>
+<button class="brand-btn" onclick="setBrand('samsung')">Samsung</button>
+<button class="brand-btn" onclick="setBrand('xiaomi')">Xiaomi</button>
+<button class="brand-btn" onclick="setBrand('vivo')">Vivo</button>
+<button class="brand-btn" onclick="setBrand('')">All</button>
+</div>
 
 <div id="phone-list"></div>
+
+<div id="pagination">
+<button onclick="prevPage()">Prev</button>
+<button onclick="nextPage()">Next</button>
+</div>
 
 <footer>
 © 2026 World Phone Hub | Ayush Sharma
@@ -86,47 +125,77 @@ margin-top:20px;
 
 <script>
 
+let currentPage = 0;
+let currentBrand = "iphone";
+const limit = 8;
+
 const phoneList = document.getElementById("phone-list");
 const searchBox = document.getElementById("searchBox");
 
 async function fetchPhones(query="iphone"){
-phoneList.innerHTML = "Loading...";
+
+phoneList.innerHTML="Loading...";
+
+let skip = currentPage * limit;
 
 try{
-let res = await fetch(`https://dummyjson.com/products/search?q=${query}`);
+let res = await fetch(`https://dummyjson.com/products/search?q=${query}&limit=${limit}&skip=${skip}`);
 let data = await res.json();
 
-phoneList.innerHTML = "";
+phoneList.innerHTML="";
 
-data.products.forEach(product => {
+data.products.forEach(product=>{
 
-let div = document.createElement("div");
-div.className = "phone";
+let div=document.createElement("div");
+div.className="phone";
 
-div.innerHTML = `
+let amazonLink=`https://www.amazon.in/s?k=${product.title.replace(/ /g,"+")}`;
+
+div.innerHTML=`
 <img src="${product.thumbnail}">
 <h3>${product.title}</h3>
 <p>${product.description.substring(0,60)}...</p>
-<a href="#">Buy Now</a>
+<a href="${amazonLink}" target="_blank">Buy on Amazon</a>
 `;
 
 phoneList.appendChild(div);
 
 });
 
-}catch(err){
-phoneList.innerHTML = "Failed to load data";
+}catch{
+phoneList.innerHTML="Failed to load data";
+}
+
+}
+
+function setBrand(brand){
+currentBrand=brand || searchBox.value || "iphone";
+currentPage=0;
+fetchPhones(currentBrand);
+}
+
+function nextPage(){
+currentPage++;
+fetchPhones(currentBrand);
+}
+
+function prevPage(){
+if(currentPage>0){
+currentPage--;
+fetchPhones(currentBrand);
 }
 }
 
-fetchPhones();
-
-searchBox.addEventListener("keyup", () => {
-let value = searchBox.value.trim();
-if(value.length > 2){
-fetchPhones(value);
+searchBox.addEventListener("keyup",()=>{
+let val=searchBox.value.trim();
+if(val.length>2){
+currentBrand=val;
+currentPage=0;
+fetchPhones(val);
 }
 });
+
+fetchPhones(currentBrand);
 
 </script>
 
